@@ -5,7 +5,7 @@ import com.webapp.library__app.service.ReviewService;
 import com.webapp.library__app.utils.ExtractJWT;
 import org.springframework.web.bind.annotation.*;
 
-@CrossOrigin("http://localhost:5174")
+@CrossOrigin("https://localhost:5174")
 @RestController
 @RequestMapping("/api/reviews")
 public class ReviewController {
