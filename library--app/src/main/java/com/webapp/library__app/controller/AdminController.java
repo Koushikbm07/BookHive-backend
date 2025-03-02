@@ -6,7 +6,7 @@ import com.webapp.library__app.utils.ExtractJWT;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
-@CrossOrigin("http://localhost:5174")
+@CrossOrigin("https://localhost:5174")
 @RestController
 @RequestMapping("/api/admin")
 public class AdminController {
@@ -18,6 +18,25 @@ public class AdminController {
         this.adminService=adminService;
     }
 
+    @PutMapping("/secure/increase/book/quantity")
+    public void increaseBookQuantity(@RequestHeader(value = "Authorization") String token,
+                                     @RequestParam Long bookId ) throws Exception{
+        String admin= ExtractJWT.payloadJWTExtraction(token,"\"userType\"");
+        if(admin==null || !admin.equals("admin")){
+            throw new Exception("Not a Administration Page");
+        }
+        adminService.increaseBookQuantity(bookId);
+    }
+    @PutMapping("/secure/decrease/book/quantity")
+    public void decreaseBookQuantity(@RequestHeader(value = "Authorization") String token,
+                                     @RequestParam Long bookId ) throws Exception{
+        String admin= ExtractJWT.payloadJWTExtraction(token,"\"userType\"");
+        if(admin==null || !admin.equals("admin")){
+            throw new Exception("Not a Administration Page");
+        }
+        adminService.decreaseBookQuantity(bookId);
+    }
+
     @PostMapping("/secure/add/book")
     public void postBook(@RequestHeader(value="Authorization") String token,
                          @RequestBody AddBookRequest addBookRequest) throws Exception{
@@ -26,5 +45,15 @@ public class AdminController {
             throw new Exception("Not a Administration Page");
         }
         adminService.postBook(addBookRequest);
+    }
+
+    @DeleteMapping("/secure/delete/book")
+    public void deleteBook(@RequestHeader(value="Authorization") String token,
+                           @RequestParam Long bookId) throws Exception{
+        String admin= ExtractJWT.payloadJWTExtraction(token,"\"userType\"");
+        if(admin==null || !admin.equals("admin")){
+            throw new Exception("Not a Administration Page");
+        }
+        adminService.deleteBook(bookId);
     }
 }
